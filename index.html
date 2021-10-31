@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>spooooky</title>
+    <style>
+        body {
+            width: 100%;
+            height: 100vh;
+            background: black;
+            margin: 0;
+        }
+        
+        body.on {
+            background: white;
+        }
+        
+         :not(:root):fullscreen::backdrop {
+            display: none;
+        }
+        
+        #start {
+            position: fixed;
+            font-size: 200px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        button {
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: black;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <button id='start'>start</button>
+    <div style='display: none'>
+        <audio src='assets/howl1.mp3' class='audio'></audio>
+        <audio src='assets/howl2.mp3' class='audio'></audio>
+        <audio src='assets/laugh1.mp3' class='audio'></audio>
+        <audio src='assets/laugh2.mp3' class='audio'></audio>
+        <audio src='assets/laugh3.mp3' class='audio'></audio>
+        <audio src='assets/laugh4.mp3' class='audio'></audio>
+        <audio src='assets/monster1.mp3' class='audio'></audio>
+        <audio src='assets/monster2.mp3' class='audio'></audio>
+        <audio src='assets/monster3.mp3' class='audio'></audio>
+        <audio src='assets/scream1.mp3' class='audio'></audio>
+        <audio src='assets/scream2.mp3' class='audio'></audio>
+        <audio src='assets/spooky1.mp3' class='audio'></audio>
+        <audio src='assets/thunder1.mp3' class='audio'></audio>
+        <audio src='assets/thunder2.mp3' class='audio'></audio>
+        <audio src='assets/thunder3.mp3' class='audio'></audio>
+        <audio src='assets/thunder4.mp3' class='audio'></audio>
+    </div>
+    <script>
+        let audios, body = document.body,
+            getRandomAudio;
+        const timeBetweenAudios = 20 * 1000;
+        const range = timeBetweenAudios / 2;
+
+        const loop = () => {
+            const audio = getRandomAudio();
+            audio.play();
+
+            flashScreen(audio.duration);
+
+            setTimeout(loop, audio.duration * 1000 + timeBetweenAudios + (range - Math.random() * range * 2));
+        };
+
+
+        const flashLength = 500;
+        const flashRange = 450;
+        const flashScreen = async(seconds) => {
+            const ms = seconds * 1000;
+            let start = performance.now();
+            while (performance.now() - start < ms) {
+                body.classList.toggle('on');
+                await new Promise(r => setTimeout(r, flashLength + (flashRange - Math.random() * flashRange * 2)));
+            }
+            body.classList.remove('on');
+        }
+        window.addEventListener('load', () => {
+            document.getElementById('start').addEventListener('click', () => {
+                document.getElementById('start').style.display = 'none';
+                document.body.requestFullscreen();
+                audios = document.getElementsByClassName('audio');
+                getRandomAudio = () => audios[Math.floor(Math.random() * audios.length)];
+
+                loop();
+            });
+        });
+    </script>
+</body>
+
+</html>
