@@ -71,7 +71,7 @@
             const audio = getRandomAudio();
             audio.play();
 
-            flashScreen(audio.duration);
+            if (audio.src.includes('thunder')) flashScreen(audio.duration);
 
             setTimeout(loop, audio.duration * 1000 + timeBetweenAudios + (range - Math.random() * range * 2));
         };
